@@ -20,7 +20,7 @@ namespace MoviesAPI.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<MovieTheaterDTO>>> Get([FromBody] PaginationsDTO paginationsDTO)
+        public async Task<ActionResult<List<MovieTheaterDTO>>> Get([FromQuery] PaginationDTO paginationsDTO)
         {
             var queryable = context.MovieTheaters.AsQueryable();
             await HttpContext.InsertParametersPaginationHeader(queryable);

@@ -1,6 +1,6 @@
 ﻿namespace MoviesAPI.DTOs
 {
-    public class PaginationsDTO
+    public class PaginationDTO
     {
         public int Page { get; set; } = 1;
 

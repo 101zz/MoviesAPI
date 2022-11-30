@@ -30,7 +30,7 @@ namespace MoviesAPI.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<ActorDTO>>> Get([FromQuery] PaginationsDTO paginationsDTO)
+        public async Task<ActionResult<List<ActorDTO>>> Get([FromQuery] PaginationDTO paginationsDTO)
         {
             var queryable = context.Actors.AsQueryable();
             await HttpContext.InsertParametersPaginationHeader(queryable);
@@ -47,6 +47,19 @@ namespace MoviesAPI.Controllers
                 return NotFound();
             }
             return mapper.Map<ActorDTO>(actor);
+        }
+
+        [HttpGet("searchByName/{query}")]
+        public async Task<ActionResult<List<ActorsMovieDTO>>> SearchByName(string query)
+        {
+            if (string.IsNullOrWhiteSpace(query)) { return new List<ActorsMovieDTO>(); }
+
+            return await context.Actors
+                .Where(x => x.Name.Contains(query))
+                .OrderBy(x => x.Name)
+                .Select(x => new ActorsMovieDTO { Id = x.Id, Name = x.Name, Picture = x.Picture })
+                .Take(5)
+                .ToListAsync();
         }
 
         [HttpPost]
